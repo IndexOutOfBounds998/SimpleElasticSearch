@@ -1,0 +1,7 @@
+jdbcUrl = jdbc:mysql://192.168.3.100:3306/
+#jdbcUrl = jdbc:mysql://127.0.0.1:3306/
+user = root
+password =123456
+datasource = aliyun
+initialSize=20
+maxActive=200

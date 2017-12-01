@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/main/java/accessor/AccessorClientImpl.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/config/MainConfig.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/config/_JFinalDemoGenerator.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/Classifications.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/Product.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/Products.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/ProductsAttrs.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/_MappingKit.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/base/BaseBrands.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/base/BaseClassifications.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/base/BaseProduct.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/base/BaseProducts.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/model/base/BaseProductsAttrs.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/util/SearchUtil.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/a_little_config.txt" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/test/java/org/shanhu/model/ProductEntity.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
