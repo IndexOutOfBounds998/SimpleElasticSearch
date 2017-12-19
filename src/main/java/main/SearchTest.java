@@ -1,23 +1,16 @@
 package main;
 
-import accessor.AccessorClientImpl;
-import accessor.Hits;
 import accessor.IAccessor;
 import model.ProductsEntity;
 
 import model.Result;
 import org.elasticsearch.search.SearchHit;
 
-import org.elasticsearch.search.SearchHits;
-
 import org.elasticsearch.search.sort.SortOrder;
-import util.BooleanCondtionBuilder;
-import util.ClientFactoryBuilder;
-import util.Range;
+import builder.BooleanCondtionBuilder;
+import builder.ClientFactoryBuilder;
 
 import java.util.*;
-
-import java.util.logging.Logger;
 
 /**
  * @Author: yang 【youtulu.cn】

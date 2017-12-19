@@ -1,12 +1,10 @@
-package util;
+package builder;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -128,7 +126,7 @@ public class BooleanCondtionBuilder
     
     public static class Builder
     {
-        private BooleanCondtionBuilder condtionBuilder = new BooleanCondtionBuilder();;
+        private BooleanCondtionBuilder condtionBuilder = new BooleanCondtionBuilder();
         
         public Builder setSortMap(Map<String, SortOrder> sortMap)
         {

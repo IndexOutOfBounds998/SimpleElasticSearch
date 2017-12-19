@@ -8,7 +8,6 @@ import model.Result;
 import org.elasticsearch.action.ActionRequestBuilder;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.mapping.put.PutMappingRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -21,20 +20,18 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Requests;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
-import util.BooleanCondtionBuilder;
+import builder.BooleanCondtionBuilder;
 import util.ClientFactory;
-import util.ClientFactoryBuilder;
+import builder.ClientFactoryBuilder;
 import util.SearchUtil;
 
 /**
@@ -493,8 +490,6 @@ public class AccessorClientImpl implements IAccessor
             QueryStringQueryBuilder queryFilterBuilder = new QueryStringQueryBuilder("白色");
             queryFilterBuilder.defaultField("productName.pinyin");
             boolQueryBuilder.must(queryFilterBuilder);
-            boolQueryBuilder.must(QueryBuilders.termQuery("userId", "1"));
-            boolQueryBuilder.must(QueryBuilders.termQuery("brandId", "1"));
             searchRequestBuilder.setQuery(boolQueryBuilder);
         }
         // 设置开始位置及大小

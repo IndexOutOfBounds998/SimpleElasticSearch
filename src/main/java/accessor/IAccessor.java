@@ -1,9 +1,7 @@
 package accessor;
 
 import model.Result;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.search.SearchHits;
-import util.BooleanCondtionBuilder;
+import builder.BooleanCondtionBuilder;
 
 import java.util.List;
 

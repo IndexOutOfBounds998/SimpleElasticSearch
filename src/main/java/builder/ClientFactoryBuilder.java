@@ -1,23 +1,18 @@
-package util;
+package builder;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import accessor.AccessorClientImpl;
 import accessor.IAccessor;
-import com.google.common.base.Preconditions;
-import common.Constant;
 import common.Init;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import util.Check;
 
 /**
  * Created by yang on 2017/7/11.
@@ -107,34 +102,34 @@ public class ClientFactoryBuilder
         {
             ClientFactoryBuilder.HOSTS = HOSTS;
             return this;
-            
+
         }
-        
+
         public builder setCLUSTER_NAME(String CLUSTER_NAME)
-        
+
         {
             ClientFactoryBuilder.CLUSTER_NAME = CLUSTER_NAME;
             return this;
         }
-        
+
         public builder setCLIENT_PORT(int CLIENT_PORT)
         {
             ClientFactoryBuilder.CLIENT_PORT = CLIENT_PORT;
             return this;
         }
-        
+
         public builder setINIT(boolean init)
         {
             ClientFactoryBuilder.INIT = init;
             return this;
         }
-        
+
         public builder setCheck(boolean check)
         {
             ClientFactoryBuilder.IS_CHECK = check;
             return this;
         }
-        
+
         public IAccessor create()
         {
             IAccessor accessor = new AccessorClientImpl();

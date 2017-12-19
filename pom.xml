@@ -7,6 +7,7 @@
     <groupId>com.shanhu.es</groupId>
     <artifactId>elasticSearch</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
     <build>
         <plugins>
             <plugin>
@@ -64,6 +65,11 @@
 
     </dependencies>
 
-
+    <distributionManagement>
+        <repository>
+            <id>yang-mvn-repo</id>
+            <url>file:D:/yang-mvn-repo/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

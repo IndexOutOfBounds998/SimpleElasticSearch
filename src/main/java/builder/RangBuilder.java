@@ -1,7 +1,7 @@
-package util;
+package builder;
 
+import org.apache.lucene.search.Sort;
 import org.elasticsearch.index.query.RangeQueryBuilder;
-
 import java.util.List;
 import java.util.Map;
 
@@ -14,23 +14,23 @@ public class RangBuilder
     
     private String fild;
     
-    private List<Map<String, Range>> range;
+    private List<Map<String, Sort>> range;
     
     private void deal()
     {
         RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(this.fild);
         
-//        for (){
-//
-//        }
-//        rangeQueryBuilder.gt()
+        // for (){
+        //
+        // }
+        // rangeQueryBuilder.gt()
     }
     
     public static class Builder
     {
         private String fild;
         
-        private List<Map<String, Range>> range;
+        private List<Map<String, Sort>> range;
         
         private RangBuilder rangBuilder = new RangBuilder();
         
@@ -40,7 +40,7 @@ public class RangBuilder
             return this;
         }
         
-        public Builder setRange(List<Map<String, Range>> range)
+        public Builder setRange(List<Map<String, Sort>> range)
         {
             rangBuilder.range = range;
             return this;

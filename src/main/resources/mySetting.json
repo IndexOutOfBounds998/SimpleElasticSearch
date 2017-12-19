@@ -6,24 +6,22 @@
       "analyzer": {
         "ik_pinyin_analyzer": {
           "type": "custom",
-          "tokenizer": "ik_smart",
+          "tokenizer": "ik_max_word",
           "filter": [
-            "my_pinyin",
-            "standard"
+            "my_pinyin"
           ]
         }
       },
       "filter": {
         "my_pinyin": {
           "type": "pinyin",
-          "keep_full_pinyin": true,
-          "keep_original": true,
-          "keep_first_letter": false,
           "keep_separate_first_letter": false,
-          "keep_joined_full_pinyin": true,
+          "keep_full_pinyin": true,
+          "keep_original": false,
           "limit_first_letter_length": 16,
           "lowercase": true,
           "remove_duplicated_term": true,
+          "ignore_pinyin_offset": false,
           "keep_none_chinese_in_first_letter": true,
           "keep_none_chinese_together": true
         }

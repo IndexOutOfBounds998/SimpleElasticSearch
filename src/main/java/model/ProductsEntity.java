@@ -51,6 +51,9 @@ public class ProductsEntity
     private String productOrgPrice;
     
     @Field(type = FieldType.Integer, index = FieldIndex.analyzed)
+    private Integer isWatermark;
+    
+    @Field(type = FieldType.Integer, index = FieldIndex.analyzed)
     private Integer isDelete;
     
     @Field(type = FieldType.keyword, fields = true, boost = "10")

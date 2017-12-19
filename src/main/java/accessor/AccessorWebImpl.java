@@ -11,7 +11,7 @@ import model.Result;
 import org.apache.log4j.Logger;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import util.BooleanCondtionBuilder;
+import builder.BooleanCondtionBuilder;
 import util.SearchUtil;
 import util.WebUtil;
 
