@@ -116,44 +116,6 @@ public class SearchUtil
     {
         // 直接调用fastjson 转成json字符串
         return JSON.toJSONString(model, true);
-        
-        // <editor-fold desc="过时的操作，摒弃不用">
-        // String json = "{";
-        // Class clzz = model.getClass();
-        // java.lang.reflect.Field[] fields = clzz.getDeclaredFields();
-        // for (java.lang.reflect.Field field : fields)
-        // {
-        // String fieldName = field.getName();
-        // // if(field.getAnnotation(Field.class) != null){
-        // // OR
-        // if (field.isAnnotationPresent(Field.class))
-        // {
-        // String firstLetter = fieldName.substring(0, 1).toUpperCase();
-        // String getMethodName = "get" + firstLetter + fieldName.substring(1);
-        // // 调用原对象的getXXX()方法
-        // Method method;
-        // Object value = null;
-        // try
-        // {
-        // method = clzz.getDeclaredMethod(getMethodName);
-        // value = method.invoke(model);
-        // }
-        // catch (Exception e)
-        // {
-        // e.printStackTrace();
-        // }
-        // if (value == null)
-        // {
-        // value = "";
-        // }
-        // json += '\"' + fieldName + '\"' + ":" + '\"' + value + '\"' + ",";
-        // }
-        // }
-        // json = json.substring(0, json.length() - 1);
-        // json += "}";
-        // // System.err.println(json);
-        // return json;
-        // </editor-fold>
     }
     
     /**

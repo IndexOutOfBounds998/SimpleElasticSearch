@@ -50,8 +50,8 @@ public class ProductsEntity
     @Field(type = FieldType.text, index = FieldIndex.analyzed)
     private String productOrgPrice;
     
-    @Field(type = FieldType.Integer, index = FieldIndex.analyzed)
-    private Integer isWatermark;
+    @Field(type = FieldType.text, index = FieldIndex.analyzed)
+    private String productWatermarkUrl;
     
     @Field(type = FieldType.Integer, index = FieldIndex.analyzed)
     private Integer isDelete;
@@ -85,6 +85,16 @@ public class ProductsEntity
     
     @Field(type = FieldType.keyword, fields = true)
     private String productIntro;
+    
+    public String getProductWatermarkUrl()
+    {
+        return productWatermarkUrl;
+    }
+    
+    public void setProductWatermarkUrl(String productWatermarkUrl)
+    {
+        this.productWatermarkUrl = productWatermarkUrl;
+    }
     
     public Integer getSort()
     {

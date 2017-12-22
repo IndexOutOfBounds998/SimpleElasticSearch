@@ -19,6 +19,9 @@ import util.Check;
  */
 public class ClientFactoryBuilder
 {
+    private ClientFactoryBuilder()
+    {
+    }
     
     // 地址
     private static List<String> HOSTS;
@@ -102,34 +105,34 @@ public class ClientFactoryBuilder
         {
             ClientFactoryBuilder.HOSTS = HOSTS;
             return this;
-
+            
         }
-
+        
         public builder setCLUSTER_NAME(String CLUSTER_NAME)
-
+        
         {
             ClientFactoryBuilder.CLUSTER_NAME = CLUSTER_NAME;
             return this;
         }
-
+        
         public builder setCLIENT_PORT(int CLIENT_PORT)
         {
             ClientFactoryBuilder.CLIENT_PORT = CLIENT_PORT;
             return this;
         }
-
+        
         public builder setINIT(boolean init)
         {
             ClientFactoryBuilder.INIT = init;
             return this;
         }
-
+        
         public builder setCheck(boolean check)
         {
             ClientFactoryBuilder.IS_CHECK = check;
             return this;
         }
-
+        
         public IAccessor create()
         {
             IAccessor accessor = new AccessorClientImpl();

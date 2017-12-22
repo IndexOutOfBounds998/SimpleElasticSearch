@@ -46,7 +46,7 @@ public class DataInputThread extends Thread
         IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch")
             .setCLIENT_PORT(9300)
             .setHOSTS(list)
-            .setINIT(true)
+            .setINIT(false)
             .create();
         
         LOG.info("================初始化数据库==================");
@@ -63,7 +63,8 @@ public class DataInputThread extends Thread
                 + "\tp.product_price,\n" + "\tp.is_hide_price,\n" + "\tp.create_time,\n" + "\tp.update_time,\n"
                 + "\tp.product_introduction,\n" + "\tp.is_recommend,\n" + "\tp.product_original_price,\n"
                 + "\tp.notice,\n" + "\tp.is_delete,\n" + "\tp.product_material,\n" + "\tp.product_code,\n"
-                + "\tp.sort\n" + "FROM\n" + "\tproducts AS p\n" + "LEFT JOIN brands AS b ON p.brand_id = b.brand_id\n"
+                + "\tp.product_watermark_url,\n" + "\tp.sort\n" + "FROM\n" + "\tproducts AS p\n"
+                + "LEFT JOIN brands AS b ON p.brand_id = b.brand_id\n"
                 + "LEFT JOIN classifications AS c ON p.classification_id = c.classification_id";
             // 如果不是第一次的话 直接执行该语句
             if (isNoFist)
@@ -127,6 +128,7 @@ public class DataInputThread extends Thread
                     productEntity.setProductMaterial(productMate);
                     productEntity.setProductCode(productCode);
                     productEntity.setSort(sort);
+                    productEntity.setProductWatermarkUrl(resultSet.getString("product_watermark_url"));
                     productEntity.setSellStatus(sell_status);
                     productEntity.setSystemType(system_type);
                     productsEntityList.add(productEntity);
