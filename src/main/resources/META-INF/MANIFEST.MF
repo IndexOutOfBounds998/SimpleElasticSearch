@@ -29,6 +29,6 @@ Class-Path: lib/jopt-simple-5.0.2.jar lib/securesm-1.1.jar lib/lang-mu
  lib/jackson-dataformat-yaml-2.8.6.jar lib/commons-codec-1.10.jar lib/
  rest-5.5.0.jar lib/animal-sniffer-annotations-1.14.jar lib/netty-hand
  ler-4.1.11.Final.jar lib/netty-transport-4.1.11.Final.jar lib/lucene-
- highlighter-6.6.0.jar
-Main-Class: main.DataInputEs
+ highlighter-6.6.0.jar lib/commons-pool2-2.4.2.jar lib/jedis-2.8.1.jar
+Main-Class: main.DataInputMain
 

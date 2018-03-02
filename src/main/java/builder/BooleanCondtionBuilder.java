@@ -5,6 +5,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +19,9 @@ public class BooleanCondtionBuilder
     
     // and
     private Map<String, String> mustMap;
+    
+    // and
+    private Map<String, List<Object>> mustMapObj;
     
     // or
     private Map<String, String> mustNotMap;
@@ -92,6 +96,17 @@ public class BooleanCondtionBuilder
             for (Map.Entry<String, String> entry : this.mustMap.entrySet())
             {
                 mustTagsBuilder.must(QueryBuilders.termQuery(entry.getKey(), entry.getValue()));
+            }
+            this.boolQueryBuilder.must(mustTagsBuilder);
+        }
+        
+        if (this.mustMapObj != null && this.mustMapObj.size() > 0)
+        {
+            BoolQueryBuilder mustTagsBuilder = QueryBuilders.boolQuery();
+            
+            for (Map.Entry<String, List<Object>> entry : this.mustMapObj.entrySet())
+            {
+                mustTagsBuilder.must(QueryBuilders.termsQuery(entry.getKey(), entry.getValue()));
                 
             }
             this.boolQueryBuilder.must(mustTagsBuilder);
@@ -137,6 +152,12 @@ public class BooleanCondtionBuilder
         public Builder setMustMap(Map<String, String> mustMap)
         {
             condtionBuilder.mustMap = mustMap;
+            return this;
+        }
+        
+        public Builder setMustMapList(Map<String, List<Object>> mustMap)
+        {
+            condtionBuilder.mustMapObj = mustMap;
             return this;
         }
         

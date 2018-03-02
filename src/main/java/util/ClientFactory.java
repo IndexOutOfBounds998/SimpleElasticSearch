@@ -4,7 +4,6 @@ import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import common.Constant;
-import model._MappingKit;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
@@ -50,22 +49,5 @@ public class ClientFactory
         }
         return client;
     }
-    
-    /**
-     * 初始化数据层
-     */
-    public static void init()
-    {
-        LOG.info("================读取数据库配置 start==================");
-        PropKit.use("a_little_config.txt");
-        DruidPlugin dp = new DruidPlugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim());
-        
-        ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
-        _MappingKit.mapping(arp);
-        
-        dp.start();
-        arp.start();
-        
-        LOG.info("================读取数据库配置 end==================");
-    }
+
 }

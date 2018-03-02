@@ -1,8 +1,10 @@
 package accessor;
 
-import model.Result;
 import builder.BooleanCondtionBuilder;
+import common.Result;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -31,6 +33,9 @@ public interface IAccessor
     
     /* 创建索引 */
     boolean createIndexWithSettings(Class clazz);
+    
+    /* 创建索引 */
+    boolean createIndexWithSettings(Class clazz, String json);
     
     /* 删除索引 */
     boolean deleteIndex(String indexName);
@@ -65,5 +70,7 @@ public interface IAccessor
     boolean hasMapping(Class clazz);
     
     boolean hasMapping(String indexName, String typeName);
+    
+    <T> Collection<Terms.Bucket> groupByAggs(Class<T> clazz, String filed, BooleanCondtionBuilder query);
     
 }

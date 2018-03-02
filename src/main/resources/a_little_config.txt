@@ -5,3 +5,6 @@ password =123456
 datasource = aliyun
 initialSize=20
 maxActive=200
+
+redisUrl=192.168.3.100
+redisPort=6379

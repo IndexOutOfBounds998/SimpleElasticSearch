@@ -1,20 +1,20 @@
-package model;
+package common;
 
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 
 import java.util.List;
 
 /**
- * @Author: yang 【youtulu.cn】
- * @Date: 2017/11/27.16:01
+ * @Author: yang
+ * @Date: 2018/3/1.16:43
+ * @Desc: to do?
  */
-public class Result
+public class Result<T>
 {
     
     private SearchHits searchHits;
     
-    private List<ProductsEntity> list;
+    private List<T> list;
     
     public SearchHits getSearchHits()
     {

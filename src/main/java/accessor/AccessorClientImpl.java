@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
 
-import model.Result;
+import common.Result;
 import org.elasticsearch.action.ActionRequestBuilder;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -26,6 +26,9 @@ import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
@@ -48,7 +51,7 @@ public class AccessorClientImpl implements IAccessor
     {
         try
         {
-            client = ClientFactory.getClient() == null ? ClientFactoryBuilder.getClient() : ClientFactory.getClient();
+            client = ClientFactoryBuilder.getClient();
         }
         catch (Exception e)
         {
@@ -89,9 +92,9 @@ public class AccessorClientImpl implements IAccessor
     public <T> boolean add(List<T> models)
     {
         boolean bool = false;
-        if (models.size() <= 1)
+        if (models.size() == 1)
         {
-            LOG.warning("插入数据集合为空！");
+            this.add(models.get(0));
         }
         else
         {
@@ -126,8 +129,12 @@ public class AccessorClientImpl implements IAccessor
                 // process failures by iterating through each bulk response item
                 bool = true;
             }
+            else
+            {
+                LOG.info("buildFailureMessage:" + bulkResponse.buildFailureMessage());
+            }
         }
-        LOG.info("添加对象列表：" + models + (bool ? " 成功！" : " 失败"));
+        LOG.info("添加对象列表个数为：" + models.size() + (bool ? " 成功！" : " 失败"));
         return bool;
     }
     
@@ -226,13 +233,70 @@ public class AccessorClientImpl implements IAccessor
             // String response = WebUtil.httpExecute(RequestMethodType.PUT, Constant.BASE_URL + indexName, settings);
             // JSONObject responseJson = JSON.parseObject(response);
             // boolean bool = Boolean.parseBoolean(responseJson.get("acknowledged").toString());
-            boolean bool = client.admin()
-                .indices()
-                .prepareCreate(indexName)
-                .setSettings(settings)
-                .execute()
-                .actionGet()
-                .isAcknowledged();
+            boolean bool = false;
+            try
+            {
+                bool = client.admin()
+                    .indices()
+                    .prepareCreate(indexName)
+                    .setSettings(settings)
+                    .execute()
+                    .actionGet()
+                    .isAcknowledged();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            
+            if (bool)
+            {
+                LOG.info("使用settings创建索引\"" + indexName + "\"成功！");
+            }
+            else
+            {
+                // LOG.warn("创建索引:" + indexName + "失败！");
+                throw new RuntimeException("创建索引\"" + indexName + "\"失败,可能的问题：您的settings配置不正确！");
+            }
+            return bool;
+        }
+        return false;
+    }
+    
+    /* 创建索引 */
+    @Override
+    public boolean createIndexWithSettings(Class clazz, String json)
+    {
+        String indexName = SearchUtil.getIndexName(clazz);
+        String settings = json;
+        // 如果settings为null(settings.yml文件不存在)，则使用带
+        // 有number_of_shards和number_of_replicas配置的创建索引
+        if (settings == null)
+        {
+            createIndex(clazz);
+        }
+        else
+        {
+            LOG.info("settings内容：" + settings);
+            // 通过web操作完成
+            // String response = WebUtil.httpExecute(RequestMethodType.PUT, Constant.BASE_URL + indexName, settings);
+            // JSONObject responseJson = JSON.parseObject(response);
+            // boolean bool = Boolean.parseBoolean(responseJson.get("acknowledged").toString());
+            boolean bool = false;
+            try
+            {
+                bool = client.admin()
+                    .indices()
+                    .prepareCreate(indexName)
+                    .setSettings(settings)
+                    .execute()
+                    .actionGet()
+                    .isAcknowledged();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
             
             if (bool)
             {
@@ -418,9 +482,34 @@ public class AccessorClientImpl implements IAccessor
         SearchResponse response = searchRequestBuilder.execute().actionGet();
         // 处理查询结果
         SearchHits hits = response.getHits();
+        
+        // 转换 model
+        List<T> list = new ArrayList<T>();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        for (SearchHit hit : hits.getHits())
+        {
+            Map<String, Object> map = hit.getSourceAsMap();
+            // 将指定显示的字段放入map
+            for (String field : map.keySet())
+            {
+                String value = map.get(field).toString();
+                resultMap.put(field, value);
+            }
+            // OR for(String field : showFields){resultMap.put(field, hit.field(field).getValue().toString());}
+            // resultMap.put("id", hit.getId());
+            resultMap.put(SearchUtil.getidName(clazz), hit.getId());
+            T model = null;
+            if (resultMap != null)
+            {
+                model = SearchUtil.MapToModel(resultMap, clazz);
+            }
+            list.add(model);
+        }
+        
         // 返回结果集
         Result result = new Result();
         result.setSearchHits(hits);
+        result.setList(list);
         return result;
     }
     
@@ -858,6 +947,41 @@ public class AccessorClientImpl implements IAccessor
         LOG.info("存在性检测====>" + (mappingExists ? "mapping \"" + indexName + "/" + typeName + "\"存在"
             : "mapping：" + indexName + "/" + typeName + "不存在！"));
         return mappingExists;
+    }
+    
+    @Override
+    public <T> Collection<Terms.Bucket> groupByAggs(Class<T> clazz, String filed, BooleanCondtionBuilder query)
+    {
+        String indexName = SearchUtil.getIndexName(clazz);
+        String typeName = SearchUtil.getTypeName((clazz));
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName).setTypes(typeName);
+        if (query != null && query.getBoolQueryBuilder() != null)
+        {
+            searchRequestBuilder.setQuery(query.getBoolQueryBuilder());
+        }
+        if (query != null && query.getStart() > 0)
+        {
+            searchRequestBuilder.setFrom(query.getStart());
+        }
+        if (query != null && query.getStart() > 0)
+        {
+            searchRequestBuilder.setSize(query.getRow());
+        }
+        SearchResponse searchResponse = searchRequestBuilder
+            .addAggregation(AggregationBuilders.terms("by_" + filed).field(filed)).execute().actionGet();
+        
+        Terms agg = searchResponse.getAggregations().get("by_" + filed);
+        
+        for (Terms.Bucket entry : agg.getBuckets())
+        {
+            String key = (String)entry.getKey(); // bucket key
+            long docCount = entry.getDocCount(); // Doc count
+            
+            System.out.println(key);
+            System.out.println(docCount);
+            
+        }
+        return null;
     }
     
     // @Override

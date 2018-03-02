@@ -49,6 +49,8 @@ public class ClientFactoryBuilder
     private static boolean IS_CHECK = false;
     
     public static TransportClient client;
+
+
     
     public static TransportClient getClient()
     {
@@ -143,5 +145,7 @@ public class ClientFactoryBuilder
             }
             return accessor;
         }
+
+
     }
 }
