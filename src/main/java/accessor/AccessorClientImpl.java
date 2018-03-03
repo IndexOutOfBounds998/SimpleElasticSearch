@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Logger;
 
+import builder.QueryBuilderCondition;
 import common.Result;
 import org.elasticsearch.action.ActionRequestBuilder;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
@@ -84,7 +85,7 @@ public class AccessorClientImpl implements IAccessor
         }
         boolean bool = Integer.parseInt(response.getId()) >= 0;
         LOG.info("添加对象" + model + (bool ? "成功！" : "失败"));
-        return Integer.parseInt(response.getId()) >= 0;
+        return bool;
     }
     
     /* 批量添加对象 */
@@ -94,7 +95,7 @@ public class AccessorClientImpl implements IAccessor
         boolean bool = false;
         if (models.size() == 1)
         {
-            this.add(models.get(0));
+            return this.add(models.get(0));
         }
         else
         {
@@ -513,6 +514,73 @@ public class AccessorClientImpl implements IAccessor
         return result;
     }
     
+    @Override
+    public <T> Result searchFun(Class<T> clazz, QueryBuilderCondition params)
+    {
+        String indexName = SearchUtil.getIndexName(clazz);
+        String typeName = SearchUtil.getTypeName((clazz));
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName);
+        searchRequestBuilder.setTypes(typeName);
+        // 设置是否按查询匹配度排序
+        searchRequestBuilder.setExplain(true);
+        // 设置查询类型
+        searchRequestBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
+        // 设置query
+        if (params != null)
+        {
+            searchRequestBuilder.setQuery(params.getBoolQueryBuilder());
+        }
+        if (params.getRow() > 0)
+        {
+            // 设置开始位置及大小
+            searchRequestBuilder.setFrom(params.getStart()).setSize(params.getRow());
+        }
+        // 排序字段
+        if (params.getSortMap() != null && params.getSortMap().size() > 0)
+        {
+            Iterator it = params.getSortMap().entrySet().iterator();
+
+            while (it.hasNext())
+            {
+                Map.Entry<String, SortOrder> entity = (Map.Entry)it.next();
+                searchRequestBuilder.addSort(entity.getKey(), entity.getValue());
+            }
+        }
+        // 执行查询操作
+        SearchResponse response = searchRequestBuilder.execute().actionGet();
+        // 处理查询结果
+        SearchHits hits = response.getHits();
+        
+        // 转换 model
+        List<T> list = new ArrayList<T>();
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        for (SearchHit hit : hits.getHits())
+        {
+            Map<String, Object> map = hit.getSourceAsMap();
+            // 将指定显示的字段放入map
+            for (String field : map.keySet())
+            {
+                String value = map.get(field).toString();
+                resultMap.put(field, value);
+            }
+            // OR for(String field : showFields){resultMap.put(field, hit.field(field).getValue().toString());}
+            // resultMap.put("id", hit.getId());
+            resultMap.put(SearchUtil.getidName(clazz), hit.getId());
+            T model = null;
+            if (resultMap != null)
+            {
+                model = SearchUtil.MapToModel(resultMap, clazz);
+            }
+            list.add(model);
+        }
+        
+        // 返回结果集
+        Result result = new Result();
+        result.setSearchHits(hits);
+        result.setList(list);
+        return result;
+    }
+    
     /* 根据查询条件删除数据 */
     // @Override
     @SuppressWarnings("deprecation")
@@ -570,7 +638,7 @@ public class AccessorClientImpl implements IAccessor
         // 设置查询类型
         // searchRequestBuilder.setSearchType(SearchType.DEFAULT);
         // 设置query
-        // QueryBuilder queryBuilder = QueryBuilders.wildcardQuery("productName.pinyin", "*白色的墙*");
+        // QueryBuilderCondition queryBuilder = QueryBuilders.wildcardQuery("productName.pinyin", "*白色的墙*");
         // searchRequestBuilder.setQuery(queryBuilder);
         // 设置filter
         if (filterParams != null)
@@ -744,7 +812,7 @@ public class AccessorClientImpl implements IAccessor
         // 设置filter
         // if(filterParams != null){
         // QueryStringQueryBuilder queryFilterBuilder = new QueryStringQueryBuilder(filterParams);
-        // QueryBuilder filter = QueryBuilders.
+        // QueryBuilderCondition filter = QueryBuilders.
         // searchRequestBuilder.setPostFilter(filter);
         // }
         // 设置开始位置及大小

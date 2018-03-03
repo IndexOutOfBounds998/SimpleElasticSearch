@@ -1,7 +1,10 @@
 package accessor;
 
 import builder.BooleanCondtionBuilder;
+import builder.QueryBuilderCondition;
 import common.Result;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 import java.util.Collection;
@@ -56,6 +59,9 @@ public interface IAccessor
     
     /* 查询 */
     <T> Result searchFun(Class<T> clazz, BooleanCondtionBuilder params);
+    
+    /* 查询 */
+<T> Result searchFun(Class<T> clazz, QueryBuilderCondition params);
     
     /* 根据查询条件统计记录数 */
     long count(Class clazz, String params);

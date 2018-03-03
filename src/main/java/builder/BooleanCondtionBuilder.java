@@ -28,51 +28,51 @@ public class BooleanCondtionBuilder
     
     // not
     private Map<String, String> shouldMap;
-    
+
     // paixu
     private Map<String, SortOrder> sortMap;
-    
+
     private BoolQueryBuilder boolQueryBuilder = null;
-    
+
     private int start = 0;
-    
+
     private int row;
-    
+
     public Map<String, String> getMustMap()
     {
         return mustMap;
     }
-    
+
     public Map<String, String> getMustNotMap()
     {
         return mustNotMap;
     }
-    
+
     public Map<String, String> getShouldMap()
     {
         return shouldMap;
     }
-    
+
     public Map<String, SortOrder> getSortMap()
     {
         return sortMap;
     }
-    
+
     public BoolQueryBuilder getBoolQueryBuilder()
     {
         return boolQueryBuilder;
     }
-    
+
     public int getStart()
     {
         return start;
     }
-    
+
     public int getRow()
     {
         return row;
     }
-    
+
     public BooleanCondtionBuilder deal()
     {
         boolQueryBuilder = QueryBuilders.boolQuery();
@@ -88,91 +88,91 @@ public class BooleanCondtionBuilder
             }
             this.boolQueryBuilder.must(boolQueryBuilder);
         }
-        
+
         if (this.mustMap != null && this.mustMap.size() > 0)
         {
             BoolQueryBuilder mustTagsBuilder = QueryBuilders.boolQuery();
-            
+
             for (Map.Entry<String, String> entry : this.mustMap.entrySet())
             {
                 mustTagsBuilder.must(QueryBuilders.termQuery(entry.getKey(), entry.getValue()));
             }
             this.boolQueryBuilder.must(mustTagsBuilder);
         }
-        
+
         if (this.mustMapObj != null && this.mustMapObj.size() > 0)
         {
             BoolQueryBuilder mustTagsBuilder = QueryBuilders.boolQuery();
-            
+
             for (Map.Entry<String, List<Object>> entry : this.mustMapObj.entrySet())
             {
                 mustTagsBuilder.must(QueryBuilders.termsQuery(entry.getKey(), entry.getValue()));
-                
+
             }
             this.boolQueryBuilder.must(mustTagsBuilder);
         }
-        
+
         if (this.mustNotMap != null && this.mustNotMap.size() > 0)
         {
             BoolQueryBuilder mustNotTagsBuilder = QueryBuilders.boolQuery();
-            
+
             for (Map.Entry<String, String> entry : this.mustNotMap.entrySet())
             {
                 mustNotTagsBuilder.mustNot(QueryBuilders.termQuery(entry.getKey(), entry.getValue()));
-                
+
             }
             this.boolQueryBuilder.must(mustNotTagsBuilder);
         }
-        
+
         if (this.shouldMap != null && this.shouldMap.size() > 0)
         {
             BoolQueryBuilder shoudlTagsBuilder = QueryBuilders.boolQuery();
-            
+
             for (Map.Entry<String, String> entry : this.shouldMap.entrySet())
             {
                 shoudlTagsBuilder.should(QueryBuilders.termQuery(entry.getKey(), entry.getValue()));
-                
+
             }
             this.boolQueryBuilder.must(shoudlTagsBuilder);
         }
-        
+
         return this;
     }
-    
+
     public static class Builder
     {
         private BooleanCondtionBuilder condtionBuilder = new BooleanCondtionBuilder();
-        
+
         public Builder setSortMap(Map<String, SortOrder> sortMap)
         {
             condtionBuilder.sortMap = sortMap;
             return this;
         }
-        
+
         public Builder setMustMap(Map<String, String> mustMap)
         {
             condtionBuilder.mustMap = mustMap;
             return this;
         }
-        
+
         public Builder setMustMapList(Map<String, List<Object>> mustMap)
         {
             condtionBuilder.mustMapObj = mustMap;
             return this;
         }
-        
+
         public Builder setQueryMap(Map<String, String> queryMap)
         {
             condtionBuilder.queryMap = queryMap;
             return this;
         }
-        
+
         public Builder setMustNotMap(Map<String, String> mustNotMap)
         {
             condtionBuilder.mustNotMap = mustNotMap;
             return this;
         }
-        
+
         public Builder setShouldMap(Map<String, String> shouldMap)
         {
             condtionBuilder.shouldMap = shouldMap;
