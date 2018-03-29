@@ -13,14 +13,17 @@ import annotations.Document;
 import annotations.Field;
 import annotations.ID;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.*;
+import com.google.common.collect.Lists;
 import common.Constant;
 import common.ParamsParseException;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggerFactory;
 
+import org.elasticsearch.common.Strings;
 import org.elasticsearch.search.sort.SortOrder;
-import com.google.common.base.Preconditions;
 import sun.rmi.runtime.Log;
 
 /**
@@ -486,7 +489,7 @@ public class SearchUtil
                 String stored = ann.stored() + "";
                 String analyzer = ann.analyzer();
                 String format = ann.format();
-                String boost = ann.boost();
+                
                 boolean fields1 = ann.fields();
                 // type = "string", index = "analyzed", stored = "true", analyzer = "standard"
                 if (type.equals("Auto"))
@@ -494,18 +497,26 @@ public class SearchUtil
                     continue;
                 }
                 fieldJson.put("type", type);
-                
+                // 是否多字段
                 if (fields1)
                 {
-                    JSONObject jsonObject = new JSONObject();
-                    JSONObject jsonObject2 = new JSONObject();
-                    jsonObject2.put("type", "text");
-                    jsonObject2.put("store", "no");
-                    jsonObject2.put("term_vector", "with_positions_offsets");
-                    jsonObject2.put("analyzer", "ik_pinyin_analyzer");
-                    jsonObject2.put("boost", boost);
-                    jsonObject.put("pinyin", jsonObject2);
-                    fieldJson.put("fields", jsonObject);
+                    String[] fieldsName = ann.fieldsName();
+                    String[] fieldsAnalyzer = ann.fieldsAnalyzer();
+                    if (fieldsName.length > 0)
+                    {
+                        Map<String, Object> root = new HashMap<>();
+                        for (int i = 0; i < fieldsName.length; i++)
+                        {
+                            Map<String, String> tree = new HashMap<>();
+                            tree.put("type", "text");
+                            // "index": "analyzed",
+                            tree.put("index", "analyzed");
+                            tree.put("analyzer", fieldsAnalyzer[i]);
+                            root.put(fieldsName[i], tree);
+                        }
+                        fieldJson.put("fields", JSONObject.parseObject(JSON.toJSONString(root), root.getClass()));
+                    }
+                    
                 }
                 else
                 {

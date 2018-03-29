@@ -4,6 +4,7 @@ import data.FieldIndex;
 import data.FieldType;
 
 import java.lang.annotation.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Target(ElementType.FIELD)
@@ -31,6 +32,27 @@ public @interface Field
      * @return
      */
     boolean fields() default false;
+    
+    /**
+     * 多字段
+     * 
+     * @return
+     */
+    String[] fieldsName() default {};
+    
+    /**
+     * 分析器
+     * 
+     * @return
+     */
+    String[] fieldsAnalyzer() default {};
+    
+    /**
+     * 多字段type
+     * 
+     * @return
+     */
+    FieldType fieldsType() default FieldType.text;
     
     String boost() default "1";
     
