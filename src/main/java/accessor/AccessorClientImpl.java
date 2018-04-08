@@ -29,13 +29,11 @@ import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
-import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
 import builder.BooleanCondtionBuilder;
-import util.ClientFactory;
-import builder.ClientFactoryBuilder;
+import clientManager.ClientFactoryBuilder;
 import util.SearchUtil;
 
 /**

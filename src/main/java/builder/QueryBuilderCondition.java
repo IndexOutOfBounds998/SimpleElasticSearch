@@ -2,7 +2,6 @@ package builder;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import util.ClientFactory;
 
 import java.util.List;
 import java.util.Map;

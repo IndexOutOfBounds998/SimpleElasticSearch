@@ -1,8 +1,5 @@
-package util;
+package clientManager;
 
-import com.jfinal.kit.PropKit;
-import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
-import com.jfinal.plugin.druid.DruidPlugin;
 import common.Constant;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
