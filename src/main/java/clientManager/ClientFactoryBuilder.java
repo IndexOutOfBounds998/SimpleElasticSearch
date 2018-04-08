@@ -6,13 +6,11 @@ import java.util.List;
 
 import accessor.AccessorClientImpl;
 import accessor.IAccessor;
-import common.Init;
 import org.apache.log4j.Logger;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
-import util.Check;
 
 /**
  * Created by yang on 2017/7/11.
@@ -49,8 +47,6 @@ public class ClientFactoryBuilder
     private static boolean IS_CHECK = false;
     
     public static TransportClient client;
-
-
     
     public static TransportClient getClient()
     {
@@ -85,19 +81,6 @@ public class ClientFactoryBuilder
             }
         }
         return client;
-    }
-    
-    // 执行初始化检测
-    private static void excuteCheck(IAccessor accessor)
-    {
-        if (INIT)
-        {
-            new Check(accessor).rebirthPlan();
-        }
-        if (!INIT && IS_CHECK)
-        {
-            new Check(accessor).check();
-        }
     }
     
     // 构造 节点数据
@@ -138,14 +121,8 @@ public class ClientFactoryBuilder
         public IAccessor create()
         {
             IAccessor accessor = new AccessorClientImpl();
-            if (ClientFactoryBuilder.INIT)
-            {
-                Init.initConstants();
-                excuteCheck(accessor);
-            }
             return accessor;
         }
-
-
+        
     }
 }

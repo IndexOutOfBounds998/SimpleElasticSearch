@@ -4,36 +4,44 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
-
+import accessor.IAccessor;
 import com.google.common.base.Preconditions;
 import util.Check;
 
 /*初始化主类，执行相关初始化操作*/
 public class Init
 {
-    static
+    public final static Init init = new Init();
+    
+    private Init()
     {
-        initConstants();
-        excuteCheck();
+        
     }
     
     // 执行初始化检测
-    private static void excuteCheck()
+    public void excuteCheck(IAccessor accessor)
     {
         if (Constant.INIT)
         {
-            new Check().rebirthPlan();
+            new Check(accessor).rebirthPlan();
         }
         if (!Constant.INIT && Constant.IS_CHECK)
         {
-            new Check().check();
+            new Check(accessor).check();
         }
     }
     
-    /* 初始化相关常量参数 */
-    public static void initConstants()
+    /*
+     * 初始化相关常量参数
+     * 
+     * @see InputStream in = ClassLoader.getSystemResourceAsStream("elasticsearch.properties");
+     */
+    public void initConstants(InputStream in)
     {
-        InputStream in = ClassLoader.getSystemResourceAsStream("elasticsearch.properties");
+        if (in == null)
+        {
+            throw new IllegalArgumentException("InputStream cant be null!");
+        }
         Properties prop = new Properties();
         try
         {
