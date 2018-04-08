@@ -17,6 +17,10 @@ import java.net.UnknownHostException;
  */
 public class ClientFactory
 {
+    private ClientFactory()
+    {
+        
+    }
     
     private static Logger LOG = Logger.getLogger(ClientFactory.class);
     
@@ -49,5 +53,5 @@ public class ClientFactory
         }
         return client;
     }
-
+    
 }

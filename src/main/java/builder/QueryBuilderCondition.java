@@ -2,7 +2,9 @@ package builder;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import util.ClientFactory;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,23 +23,48 @@ public class QueryBuilderCondition
     private int start = 0;
     
     private int row;
-
-    public Map<String, SortOrder> getSortMap() {
+    
+    private boolean isShowHighLight = false;
+    
+    private float minScore = 1f;
+    
+    public float getMinScore()
+    {
+        return minScore;
+    }
+    
+    private List<String> highLightFileds;
+    
+    public boolean isShowHighLight()
+    {
+        return isShowHighLight;
+    }
+    
+    public List<String> getHighLightFileds()
+    {
+        return highLightFileds;
+    }
+    
+    public Map<String, SortOrder> getSortMap()
+    {
         return sortMap;
     }
-
-    public BoolQueryBuilder getBoolQueryBuilder() {
+    
+    public BoolQueryBuilder getBoolQueryBuilder()
+    {
         return boolQueryBuilder;
     }
-
-    public int getStart() {
+    
+    public int getStart()
+    {
         return start;
     }
-
-    public int getRow() {
+    
+    public int getRow()
+    {
         return row;
     }
-
+    
     public static class builder
     {
         QueryBuilderCondition queryBuilderCondition = new QueryBuilderCondition();
@@ -63,6 +90,19 @@ public class QueryBuilderCondition
         public builder setRow(int row)
         {
             queryBuilderCondition.row = row;
+            return this;
+        }
+        
+        public builder setMinScore(float score)
+        {
+            queryBuilderCondition.minScore = score;
+            return this;
+        }
+        
+        public builder setIsShowHighLight(boolean isShowHighLight, List<String> highLightFileds)
+        {
+            queryBuilderCondition.isShowHighLight = isShowHighLight;
+            queryBuilderCondition.highLightFileds = highLightFileds;
             return this;
         }
         

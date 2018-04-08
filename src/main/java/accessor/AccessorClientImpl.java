@@ -539,13 +539,31 @@ public class AccessorClientImpl implements IAccessor
         if (params.getSortMap() != null && params.getSortMap().size() > 0)
         {
             Iterator it = params.getSortMap().entrySet().iterator();
-
+            
             while (it.hasNext())
             {
                 Map.Entry<String, SortOrder> entity = (Map.Entry)it.next();
                 searchRequestBuilder.addSort(entity.getKey(), entity.getValue());
             }
         }
+        // 设置高亮显示
+        if (params.isShowHighLight())
+        {
+            HighlightBuilder highlightBuilder = null;
+            
+            for (String field : params.getHighLightFileds())
+            {
+                highlightBuilder = new HighlightBuilder().field(field);
+                highlightBuilder.preTags("<span style=\"color:red\">");
+                highlightBuilder.postTags("</span>");
+            }
+            searchRequestBuilder.highlighter(highlightBuilder);
+        }
+        if (!Objects.isNull(params.getMinScore()))
+        {
+            searchRequestBuilder.setMinScore(params.getMinScore());
+        }
+        
         // 执行查询操作
         SearchResponse response = searchRequestBuilder.execute().actionGet();
         // 处理查询结果
