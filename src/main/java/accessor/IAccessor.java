@@ -61,7 +61,7 @@ public interface IAccessor
     <T> Result searchFun(Class<T> clazz, BooleanCondtionBuilder params);
     
     /* 查询 */
-<T> Result searchFun(Class<T> clazz, QueryBuilderCondition params);
+    <T> Result searchFun(Class<T> clazz, QueryBuilderCondition params);
     
     /* 根据查询条件统计记录数 */
     long count(Class clazz, String params);

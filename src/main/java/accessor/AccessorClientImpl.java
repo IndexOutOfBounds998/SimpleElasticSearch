@@ -599,26 +599,7 @@ public class AccessorClientImpl implements IAccessor
         return result;
     }
     
-    /* 根据查询条件删除数据 */
-    // @Override
-    @SuppressWarnings("deprecation")
-    // public boolean delete(Class clazz, String params) {
-    // long sum = count(clazz,params);
-    // //调用参数解析工具
-    // Map<String,Object> paramsMap = SearchUtil.getParamsMap(params);
-    // String searchParams = (String)paramsMap.get("searchParams");//查询参数
-    // String indexName = SearchUtil.getIndexName(clazz);
-    // String typeName = SearchUtil.getTypeName((clazz));
-    // String id = SearchUtil.getidName((clazz));
-    // DeleteByQueryRequestBuilder deleteByQueryRequestBuilder = client.prepare
-    // deleteByQueryRequestBuilder.setTypes(typeName);
-    // //设置query
-    // QueryStringQueryBuilder queryBuilder = new QueryStringQueryBuilder(searchParams);
-    // deleteByQueryRequestBuilder.setQuery(queryBuilder);
-    // DeleteByQueryResponse response = deleteByQueryRequestBuilder.execute().actionGet();
-    // LOG.info("根据查询条件" + searchParams + "批量删除数据成功,删除" + sum + "条记录");
-    // return true;
-    // }
+
     
     /**
      * 查询接口，包括普通查询和高亮查询
@@ -997,20 +978,6 @@ public class AccessorClientImpl implements IAccessor
         
         return false;
         
-        // String indexName = SearchUtil.getIndexName(clazz);
-        // String typeName = SearchUtil.getTypeName((clazz));
-        // String response = WebUtil.httpExecute(Constant.RequestMethodType.PUT,
-        // Constant.BASE_URL + indexName + "/_mapping/" + typeName,
-        // SearchUtil.getMapping(clazz));
-        // JSONObject response_json = JSON.parseObject(response);
-        // boolean bool = Boolean.parseBoolean(response_json.get("acknowledged").toString());
-        // if(bool){
-        // LOG.info("创建mapping：" + indexName + "/" + typeName + "成功");
-        // }else{
-        // LOG.warn("创建mapping：" + indexName + "/" + typeName + "失败！");
-        // }
-        // return bool;
-        
     }
     
     @Override
@@ -1069,20 +1036,7 @@ public class AccessorClientImpl implements IAccessor
         }
         return null;
     }
-    
-    // @Override
-    // public boolean deleteType(String indexName, String typeName) {
-    // ImmutableOpenMap<String, MappingMetaData> mappings =
-    // client.admin().cluster().prepareState().execute().actionGet()
-    // .getState().metaData().index(indexName).mappings();
-    // boolean bool = false;
-    // if (mappings.containsKey(typeName)) {
-    // bool = client.admin().indices().delete(new DeleteIndexRequest(indexName)).actionGet().isAcknowledged();
-    // }
-    // LOG.info("删除类型\"" + (bool ? typeName + "\"成功" : "\"失败"));
-    // return bool;
-    // }
-    
+
     @Override
     public boolean deleteType(Class clazz)
     {
@@ -1106,69 +1060,5 @@ public class AccessorClientImpl implements IAccessor
         String typeName = SearchUtil.getTypeName((modelClazz));
         return client.prepareSearch(indexName).setTypes(typeName);
     }
-    
-    /**
-     * / 查询
-     * 
-     * @param searchParams: 符合Lucene规则的查询语句，比如：name:'东方财富' AND typeCode:4
-     * @param clazz: 要查询实体类对应的Class对象,比如MGlobal.class
-     * @param start: 查询结果显示的开始位置
-     * @param rows: 查询结果显示的记录条数
-     * @param <T> :
-     * @return 返回指定实体类型的List集合 / public <T> List<T> search(String searchParams, Class<T> clazz, int start, int rows) {
-     *         List<T> list = new ArrayList<T>(); String indexName = ESUtil.getIndexName(clazz); String typeName =
-     *         ESUtil.getTypeName((clazz)); SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName);
-     *         searchRequestBuilder.setTypes(typeName); QueryStringQueryBuilder queryBuilder = new
-     *         QueryStringQueryBuilder(searchParams); // FilterBuilder filter = queryFilter(queryBuilder); //
-     *         searchRequestBuilder.setPostFilter(filter); searchRequestBuilder.setQuery(queryBuilder);
-     *         searchRequestBuilder.setFrom(start).setSize(rows); searchRequestBuilder.setExplain(true);// 设置是否按查询匹配度排序
-     *         SearchResponse response = searchRequestBuilder.execute().actionGet(); SearchHits hits =
-     *         response.getHits(); long total = hits.getTotalHits();//记录数量 for (SearchHit hit : hits.getHits()) {
-     *         Map<String,Object> map = hit.getSource(); map.put("id", hit.getId()); T model = ESUtil.MapToModel(map,
-     *         clazz); list.add(model); } String info = "索引：" + indexName + ",类型：" + typeName + ",普通查询,查询语句：" +
-     *         searchParams + ",开始位置：" + start + ",显示行数：" + rows; LOG.info(list.size() == 0 ? info + "，本次无查询结果！" : info
-     *         + "，此次查询共有" + total + "条记录"); return list; }
-     */
-    /**
-     * @Override public <T> List<T> searchWithHighLight(String params, Class<T> clazz, String... highFields) {
-     *           Map<String,Object> searchMap = ESUtil.parserParams(params); int start =
-     *           (Integer)searchMap.get(START_STR);//查询结果显示的开始位置 int rows =
-     *           (Integer)searchMap.get(ROWS_STR);//查询结果显示的记录条数 String searchParams =
-     *           (String)searchMap.get(SEARCH_PARAMS_STR); String HLPreTags = HL_PRETAGS;//高亮显示的前缀 String HLPostTags =
-     *           HL_POSTTAGS;//高亮显示的后缀 return
-     *           searchWithHighLight(searchParams,clazz,start,rows,HLPreTags,HLPostTags,highFields); }
-     */
-    /**
-     * / 高亮查询
-     * 
-     * @param searchParams: 符合Lucene规则的查询语句，比如：name:'东方财富' AND typeCode:4
-     * @param clazz: 要查询实体类对应的Class对象,比如MGlobal.class
-     * @param start: 查询结果显示的开始位置
-     * @param rows: 查询结果显示的记录条数
-     * @param HLPreTags：高亮显示的前缀
-     * @param HLPostTags：高亮显示的后缀
-     * @param HLFields：高亮显示的字段，可以有多个，以逗号分隔
-     * @param <T>
-     * @return 返回指定实体类型的List集合 / public <T> List<T> searchWithHighLight(String searchParams, Class<T> clazz, int start,
-     *         int rows, String HLPreTags,String HLPostTags,String... HLFields ) { List<T> list = new ArrayList<T>();
-     *         String indexName = ESUtil.getIndexName(clazz); String typeName = ESUtil.getTypeName((clazz));
-     *         SearchRequestBuilder srb = client.prepareSearch(indexName); QueryStringQueryBuilder queryBuilder = new
-     *         QueryStringQueryBuilder(searchParams); srb.setTypes(typeName); srb.setQuery(queryBuilder);
-     *         srb.setFrom(start).setSize(rows); srb.setExplain(true);// 设置是否按查询匹配度排序 //设置高亮显示 for (String field :
-     *         HLFields){ srb.addHighlightedField(field); } srb.setHighlighterPreTags(HLPreTags);
-     *         srb.setHighlighterPostTags(HLPostTags); SearchResponse response = srb.execute().actionGet(); SearchHits
-     *         hits = response.getHits(); long total = hits.getTotalHits();//记录数量 for (SearchHit hit : hits.getHits()) {
-     *         Map<String,Object> map = hit.getSource(); map.put("id",hit.getId()); T model =
-     *         ESUtil.MapToModel(hit.getSource(), clazz); //获取对应的高亮域 Map<String, HighlightField> result =
-     *         hit.highlightFields(); //从设定的高亮域中取得指定域 for(String field : result.keySet()){ HighlightField HLField =
-     *         result.get(field); String fieldName = HLField.getName(); Text[] texts = HLField.fragments(); String
-     *         fieldNewValue = ""; for(Text text : texts){ fieldNewValue += text; } //通过反射将高亮字段对应的高亮内容设置进去 String
-     *         firstLetter=fieldName.substring(0, 1).toUpperCase(); String
-     *         methodName="set"+firstLetter+fieldName.substring(1); try { Method method =
-     *         clazz.getDeclaredMethod(methodName, String.class); method.invoke(model,fieldNewValue); } catch (Exception
-     *         e) { e.printStackTrace(); } // System.out.println(fieldName + " : " + fieldNewValue + "=========="); }
-     *         list.add(model); } String info = "索引：" + indexName + ",类型：" + typeName + ",高亮查询,查询语句：" + searchParams +
-     *         ",开始位置：" + start + ",显示行数：" + rows; LOG.info(list.size() == 0 ? info + "，本次无查询结果！" : info + "，此次查询共有" +
-     *         total + "条记录"); return list; }
-     */
+
 }
