@@ -12,4 +12,4 @@ IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elastic
                 .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1")))
                 .create();
                 
-accessor 对象进行增删改查数据     
+然后使用accessor 对象进行增删改查数据     
