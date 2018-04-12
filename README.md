@@ -6,3 +6,10 @@
 
 查询数据： 支持must mustnot should 查询 等bool查询
           普通查询 
+使用方式：
+IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch")
+                .setCLIENT_PORT(9300)
+                .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1")))
+                .create();
+                
+           accessor 对象进行增删改查数据     
