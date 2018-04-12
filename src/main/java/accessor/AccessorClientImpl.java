@@ -315,9 +315,26 @@ public class AccessorClientImpl implements IAccessor
     @Override
     public boolean deleteIndex(String indexName)
     {
+        return deleteIndexByName(indexName);
+    }
+    
+    @Override
+    public boolean deleteIndex(Class clazz)
+    {
+        
+        String indexName = SearchUtil.getIndexName(clazz);
+        return deleteIndexByName(indexName);
+    }
+    
+    /**
+     * @Author cyy
+     * @Date 2018/4/12 16:38
+     * @Description 通过index 删除索引
+     */
+    private boolean deleteIndexByName(String indexName)
+    {
         try
         {
-            // DeleteIndexResponse response =
             boolean bool = client.admin().indices().prepareDelete(indexName).execute().actionGet().isAcknowledged();
             LOG.info("删除索引\"" + (bool ? indexName + "\"成功" : "失败"));
             return bool;
@@ -327,6 +344,7 @@ public class AccessorClientImpl implements IAccessor
             LOG.warning("没有要删除的索引\"" + indexName + "\"");
             return false;
         }
+        
     }
     
     @Override
@@ -596,8 +614,6 @@ public class AccessorClientImpl implements IAccessor
         result.setList(list);
         return result;
     }
-    
-
     
     /**
      * 查询接口，包括普通查询和高亮查询
@@ -1034,7 +1050,7 @@ public class AccessorClientImpl implements IAccessor
         }
         return null;
     }
-
+    
     @Override
     public boolean deleteType(Class clazz)
     {
@@ -1058,5 +1074,5 @@ public class AccessorClientImpl implements IAccessor
         String typeName = SearchUtil.getTypeName((modelClazz));
         return client.prepareSearch(indexName).setTypes(typeName);
     }
-
+    
 }

@@ -43,6 +43,9 @@ public interface IAccessor
     /* 删除索引 */
     boolean deleteIndex(String indexName);
     
+    /* 删除索引 */
+    boolean deleteIndex(Class clazz);
+    
     /* 删除type */
     boolean deleteType(String indexName, String typeName);
     
