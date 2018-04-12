@@ -9,7 +9,7 @@
           
 #使用方式：
 
-#IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch") 
+# IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch") 
 #                .setCLIENT_PORT(9300)
 #                .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1")))
 #                .create(); 
