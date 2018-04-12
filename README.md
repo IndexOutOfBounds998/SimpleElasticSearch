@@ -7,7 +7,7 @@
 查询数据： 
 #支持must mustnot should 查询 等bool查询 普通查询 
           
-#使用方式：
+#代码
 
 # IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch") 
 #                .setCLIENT_PORT(9300)
