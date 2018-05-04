@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.shanhu.es</groupId>
-    <artifactId>elasticSearch</artifactId>
-    <version>1.0.6</version>
+    <groupId>pers.yang.elasticHelper</groupId>
+    <artifactId>elasticSearchHelper</artifactId>
+    <version>1.0.7</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
@@ -14,10 +14,6 @@
             <id>admin</id>
             <url>http://112.74.215.107:8081/repository/maven-releases/</url>
         </repository>
-        <!--<snapshotRepository>-->
-            <!--<id>snapshots</id>-->
-            <!--<url>http://112.74.215.107:8081/repository/maven-snapshots/</url>-->
-        <!--</snapshotRepository>-->
     </distributionManagement>
 
     <build>
@@ -85,38 +81,11 @@
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.20</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jfinal</groupId>
-            <artifactId>jfinal</artifactId>
-            <version>3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.0.29</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.5.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>2.8.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 
