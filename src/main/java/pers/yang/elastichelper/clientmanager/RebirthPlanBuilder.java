@@ -3,7 +3,7 @@ package pers.yang.elastichelper.clientmanager;
 /**
  * @Author: yang
  * @Date: 2018/5/4.17:42
- * @Desc:  用于 重新构建索引 mapping  setting 的构建类
+ * @Desc: 用于 重新构建索引 mapping  setting 的构建类
  */
 public class RebirthPlanBuilder {
 
@@ -22,10 +22,27 @@ public class RebirthPlanBuilder {
     private static boolean IS_CHECK = false;
 
 
+    public static boolean isINIT() {
+        return INIT;
+    }
 
-    public class Builder{
+
+    public static boolean isIsCheck() {
+        return IS_CHECK;
+    }
 
 
+    public static class Builder {
+
+        public Builder setINIT(boolean INIT) {
+            RebirthPlanBuilder.INIT = INIT;
+            return this;
+        }
+
+        public Builder setIsCheck(boolean isCheck) {
+            RebirthPlanBuilder.IS_CHECK = isCheck;
+            return this;
+        }
 
 
     }
