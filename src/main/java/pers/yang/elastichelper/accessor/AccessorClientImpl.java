@@ -35,7 +35,9 @@ public class AccessorClientImpl implements IAccessor {
 
     public AccessorClientImpl() {
         try {
-            client = ClientFactoryBuilder.getClient();
+            if (client == null) {
+                client = ClientFactoryBuilder.getClient();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,6 +47,12 @@ public class AccessorClientImpl implements IAccessor {
 
         client = cv;
     }
+
+    @Override
+    public TransportClient getClient() {
+        return client;
+    }
+
 
     /* 添加单个对象 */
     @Override

@@ -25,7 +25,9 @@ public class IndexAccessorImpl implements IndexAccessor {
 
     public IndexAccessorImpl() {
         try {
-            client = ClientFactoryBuilder.getClient();
+            if (client == null) {
+                client = ClientFactoryBuilder.getClient();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package pers.yang.elastichelper.accessor;
 
+import org.elasticsearch.client.transport.TransportClient;
 import pers.yang.elastichelper.builder.BooleanCondtionBuilder;
 import pers.yang.elastichelper.builder.QueryBuilderCondition;
 import pers.yang.elastichelper.common.Result;
@@ -37,6 +38,7 @@ public interface IAccessor {
     /* 根据查询条件删除数据 */
     boolean delete(Class clazz, String params);
 
+    TransportClient getClient();
 
     <T> Collection<Terms.Bucket> groupByAggs(Class<T> clazz, String filed, BooleanCondtionBuilder query);
 

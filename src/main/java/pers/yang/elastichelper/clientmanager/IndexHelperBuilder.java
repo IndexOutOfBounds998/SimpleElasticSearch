@@ -13,7 +13,7 @@ public class IndexHelperBuilder {
 
     private static TransportClient client;
 
-    public static class Builder<T> {
+    public static class Builder {
         private IndexHelperBuilder builder;
 
 
