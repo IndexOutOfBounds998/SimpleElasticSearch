@@ -1,6 +1,26 @@
-# elasticSearch
+# elasticSearchHelper
+# 太懒了 懒得写 readme 直接看测试类 就能明白了
+
+引用代码
+ pom 
+  要用 distributionManagement 方式去下载
+    <distributionManagement>
+         <repository>
+             <id>admin</id>
+             <url>http://112.74.215.107:8081/repository/maven-releases/</url>
+         </repository>
+     </distributionManagement>
+
+
+   <groupId>pers.yang.elastichelper</groupId>
+    <artifactId>elasticSearchhelper</artifactId>
+    <version>1.0.7</version>
+    <packaging>jar</packaging>
+    
+    
+
 功能：
-1.生成json生成setting  
+1.根据json生成setting  
 2.实体类注解生成mapping 
 3.数据的增删改查
 
