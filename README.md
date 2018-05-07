@@ -1,9 +1,10 @@
 # elasticSearchHelper
-# 太懒了 懒得写 readme 直接看测试类 就能明白了
+#  直接看测试类 简单明了
 
 引用代码
  pom 
-  要用 distributionManagement 方式去下载
+  #要用 distributionManagement 方式去下载
+  
    ` <distributionManagement>
          <repository>
              <id>admin</id>
@@ -11,7 +12,7 @@
          </repository>
      </distributionManagement>`
 
-#
+
   `<dependency> 
   <groupId>pers.yang.elastichelper</groupId>
     <artifactId>elasticSearchhelper</artifactId>
