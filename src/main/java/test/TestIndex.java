@@ -18,12 +18,19 @@ public class TestIndex {
 
     public static void main(String[] args) {
 
-        //创建连接
+        //创建连接 链接方式1
         IAccessor accessor = new ClientFactoryBuilder
                 .builder()
                 .setCLUSTER_NAME("elasticsearch")//es别名
                 .setCLIENT_PORT(9300)//es 端口
                 .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1"))) //es 地址
+                .create();
+
+        //创建连接 链接方式2
+        IAccessor accessor2 = new ClientFactoryBuilder
+                .builder()
+                .setConfigPath("elasticsearch.properties")
+                .initConfig(true)
                 .create();
 
         //构建indexhelper

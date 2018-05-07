@@ -14,10 +14,11 @@ import pers.yang.elastichelper.data.FieldType;
  * Field 字段名称
  * fieldsName 多字段设置
  * fieldsAnalyzer 多字段分析器 ）
+ * settings 配置setting的json 文件
  */
 
 
-@Document(index = "index", type = "type", replicas = 1, shards = 5, settings = "Setting.json.path")
+@Document(index = "index", type = "type", replicas = 1, shards = 5, settings = "Setting.json")
 public class TestModel {
     @ID
     private Integer post_id;
