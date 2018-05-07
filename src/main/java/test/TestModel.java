@@ -18,7 +18,7 @@ import pers.yang.elastichelper.data.FieldType;
  */
 
 
-@Document(index = "index", type = "type", replicas = 1, shards = 5, settings = "Setting.json")
+@Document(index = "testindex", type = "testtype", replicas = 1, shards = 5, settings = "Setting.json")
 public class TestModel {
     @ID
     private Integer post_id;

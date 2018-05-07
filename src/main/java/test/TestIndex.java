@@ -27,11 +27,11 @@ public class TestIndex {
                 .create();
 
         //创建连接 链接方式2
-        IAccessor accessor2 = new ClientFactoryBuilder
-                .builder()
-                .setConfigPath("elasticsearch.properties")
-                .initConfig(true)
-                .create();
+//        IAccessor accessor2 = new ClientFactoryBuilder
+//                .builder()
+//                .setConfigPath("elasticsearch.properties")
+//                .initConfig(true)
+//                .create();
 
         //构建indexhelper
         IndexAccessor indexAccessor = new IndexHelperBuilder

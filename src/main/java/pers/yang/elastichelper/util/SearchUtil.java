@@ -365,33 +365,6 @@ public class SearchUtil
         {
             map.put("fl", Arrays.asList(map.get("fl").toString().split(",")));
         }
-        if (!paramSet.contains("hl"))
-        {
-            map.put("hl", "false");
-        }
-        else
-        {
-            if (Boolean.parseBoolean(map.get("hl").toString()) == true)
-            {
-                if (!paramSet.contains("hl.simple.pre"))
-                {
-                    map.put("hl.simple.pre", Constant.HIGHLIGHT_PRE_TAGS);
-                }
-                if (!paramSet.contains("hl.simple.post"))
-                {
-                    map.put("hl.simple.post", Constant.HIGHLIGHT_POST_TAGS);
-                }
-                if (!paramSet.contains("hl.fl"))
-                {
-                    throw new ParamsParseException("已开启高亮查询，但是没有设置高亮查询字段！");
-                }
-                map.put("hl.fl", Arrays.asList(map.get("hl.fl").toString().split(",")));
-            }
-            else
-            {
-                map.put("hl.fl", null);
-            }
-        }
         if (!paramSet.contains("sort"))
         {
             map.put("sort", null);
@@ -418,37 +391,6 @@ public class SearchUtil
             map.put("sort", sortFields);
         }
         return map;
-    }
-    
-    /* 扫描包下面的所有实体类<暂时不用> */
-    private void scanModelsByPackage()
-    {
-        Set<Class<?>> classes = ClassUtil.scanPackage(Constant.MODELS_PACKAGE);
-        for (Class<?> clazz : classes)
-        {
-            String indexName = SearchUtil.getIndexName(clazz);
-            String typeName = SearchUtil.getTypeName(clazz);
-            // LOG.info("发现实体类：" + clazz + ",对应的索引：" + indexName + ",对应的类型：" + typeName);
-            java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-            String fieldsStr = "[";
-            for (java.lang.reflect.Field field : fields)
-            {
-                // System.out.println(field.getName());
-                Annotation[] ans = field.getAnnotations();
-                // 判断是否是ESField字段
-                for (Annotation a : ans)
-                {
-                    if (a instanceof Field)
-                    {
-                        JSONObject fieldJson = new JSONObject();
-                        fieldsStr += field.getName() + ",";
-                        break;
-                    }
-                }
-            }
-            fieldsStr = fieldsStr.substring(0, fieldsStr.length() - 1) + "]";
-            LOG.info("扫描实体类：" + clazz + ",对应的索引：" + indexName + ",对应的类型：" + typeName + ",对应的Field有效字段为：" + fieldsStr);
-        }
     }
     
     /* 获取指定类的mapping,并组装成json字符串 */
@@ -541,52 +483,7 @@ public class SearchUtil
         LOG.info("扫描类" + clazz.getName() + "完成，生成的mapping如下：\n" + rootJson.toJSONString());
         return rootJson.toJSONString();
     }
-    
-    /* 扫描包下面的所有实体类，并获取其对应的mapping,并组装成json字符串<暂时不用> */
-    public static String getMappingsByPackage()
-    {
-        Set<Class<?>> classes = ClassUtil.scanPackage(Constant.MODELS_PACKAGE);
-        JSONObject rootJson = new JSONObject();
-        for (Class<?> clazz : classes)
-        {
-            boolean init = ((Document)clazz.getAnnotation(Document.class)).init();
-            if (!init)
-                continue;
-            JSONObject typeJson = new JSONObject();
-            String indexName = SearchUtil.getIndexName(clazz);
-            String typeName = SearchUtil.getTypeName(clazz);
-            // LOG.info("发现实体类：" + clazz + ",对应的索引：" + indexName + ",对应的类型：" + typeName);
-            java.lang.reflect.Field[] fields = clazz.getDeclaredFields();
-            String fieldsStr = "[";
-            JSONObject propertiesJson = new JSONObject();
-            for (java.lang.reflect.Field field : fields)
-            {
-                if (field.isAnnotationPresent(Field.class))
-                {
-                    Field ann = field.getAnnotation(Field.class);
-                    JSONObject fieldJson = new JSONObject();
-                    fieldsStr += field.getName() + ",";
-                    String type = ann.type().name();
-                    String index = ann.index().name();
-                    String stored = ann.stored() + "";
-                    String analyzer = ann.analyzer();
-                    // type = "string", index = "analyzed", stored = "true", analyzer = "standard"
-                    fieldJson.put("type", type);
-                    fieldJson.put("index", index);
-                    fieldJson.put("stored", stored);
-                    fieldJson.put("analyzer", analyzer);
-                    propertiesJson.put(field.getName(), fieldJson);
-                }
-            }
-            typeJson.put("properties", propertiesJson);
-            rootJson.put(typeName, typeJson);
-            fieldsStr = fieldsStr.substring(0, fieldsStr.length() - 1) + "]";
-            LOG.info("扫描实体类：" + clazz + ",对应的索引：" + indexName + ",对应的类型：" + typeName + ",对应的ES有效字段为：" + fieldsStr);
-        }
-        LOG.info("扫描包" + Constant.MODELS_PACKAGE + "下面的实体类完成，生成的mapping如下：\n" + rootJson.toJSONString());
-        return rootJson.toJSONString();
-    }
-    
+
     /* 读取setting配置文件 */
     public static String getSettings(Class clazz)
     {
@@ -670,30 +567,6 @@ public class SearchUtil
     public static void main(String[] args)
         throws Exception
     {
-        // MGlobal model = new MGlobal();
-        // model.setId("-1653233969");
-        // model.setLogicId("1000521938");
-        // model.setName("恒指摩通六七牛Q");
-        // model.setPinyin("HZMTLQNQ");
-        // model.setTgsType("4");
-        // model.setKey("4:1000521938");
-        // model.setTypeCode("001006007");
-        // model.setTypeName("牛熊证");
-        // model.setUrl("EM://quoteloader?view=quotestockview&type=trend&****");
-        // model.setOrderNumber("67587.HK");
-        // model.setFileName("61");
-        // model.setFuncType("006");
-        // model.setSecuFullCode("secuFullCode");
-        // model.setUrl1("");
-        // String json = ModelToJson(model);
-        // System.out.println(json);
-        //
-        // System.out.println(getIndexNameByModel(MGlobal.class));
-        // System.out.println(getTypeNameByModel(MGlobal.class));
-        String params = "q=name:hello&sort=name+desc,key+asc&start=10&rows=5&fl=name,age,sex,key"
-            + "&hl=true&hl.fl=name,logid&hl.simple.pre=<em>&hl.simple.post=</em>";
-        
-        System.out.println(parserParams(params));
     }
     
 }
