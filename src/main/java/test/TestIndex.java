@@ -20,7 +20,7 @@ public class TestIndex {
 
         //创建连接 链接方式1
         IAccessor accessor = new ClientFactoryBuilder
-                .builder()
+                .Builder()
                 .setCLUSTER_NAME("elasticsearch")//es别名
                 .setCLIENT_PORT(9300)//es 端口
                 .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1"))) //es 地址
@@ -28,10 +28,10 @@ public class TestIndex {
 
         //创建连接 链接方式2
 //        IAccessor accessor2 = new ClientFactoryBuilder
-//                .builder()
+//                .Config()
 //                .setConfigPath("elasticsearch.properties")
 //                .initConfig(true)
-//                .create();
+//                .createByConfig();
 
         //构建indexhelper
         IndexAccessor indexAccessor = new IndexHelperBuilder

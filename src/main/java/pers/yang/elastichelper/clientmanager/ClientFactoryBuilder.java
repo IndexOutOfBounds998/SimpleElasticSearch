@@ -109,38 +109,23 @@ public class ClientFactoryBuilder {
 
 
     // 构造 节点数据
-    public static class builder {
-        public builder initConfig(boolean b) {
-            if (b) {
-                if (Strings.isNullOrEmpty(ClientFactoryBuilder.configPath)) {
-                    throw new IllegalArgumentException("configPath cant be null ! please set it");
-                }
-                ClientFactoryBuilder.initConfg(ClientFactoryBuilder.configPath);
-            }
-            return this;
-        }
-
-        //设置配置文件地址
-        public builder setConfigPath(String configPath) {
-            ClientFactoryBuilder.configPath = configPath;
-            return this;
-        }
+    public static class Builder {
 
 
-        public builder setHOSTS(List<String> HOSTS) {
+        public Builder setHOSTS(List<String> HOSTS) {
             ClientFactoryBuilder.HOSTS = HOSTS;
             return this;
 
         }
 
-        public builder setCLUSTER_NAME(String CLUSTER_NAME)
+        public Builder setCLUSTER_NAME(String CLUSTER_NAME)
 
         {
             ClientFactoryBuilder.CLUSTER_NAME = CLUSTER_NAME;
             return this;
         }
 
-        public builder setCLIENT_PORT(int CLIENT_PORT) {
+        public Builder setCLIENT_PORT(int CLIENT_PORT) {
             ClientFactoryBuilder.CLIENT_PORT = CLIENT_PORT;
             return this;
         }
@@ -151,5 +136,30 @@ public class ClientFactoryBuilder {
             return accessor;
         }
 
+    }
+
+    public static class Config {
+
+        //设置配置文件地址
+        public Config setConfigPath(String configPath) {
+            ClientFactoryBuilder.configPath = configPath;
+            return this;
+        }
+
+        public Config initConfig(boolean b) {
+            if (b) {
+                if (Strings.isNullOrEmpty(ClientFactoryBuilder.configPath)) {
+                    throw new IllegalArgumentException("configPath cant be null ! please set it");
+                }
+                ClientFactoryBuilder.initConfg(ClientFactoryBuilder.configPath);
+            }
+            return this;
+        }
+
+        public IAccessor createByConfig() {
+
+            IAccessor accessor = new AccessorClientImpl(ClientFactoryBuilder.getClient());
+            return accessor;
+        }
     }
 }
