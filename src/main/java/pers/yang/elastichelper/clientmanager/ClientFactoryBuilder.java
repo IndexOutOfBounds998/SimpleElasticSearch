@@ -23,8 +23,6 @@ public class ClientFactoryBuilder {
     private ClientFactoryBuilder() {
     }
 
-    //初始化配置文件
-    private static boolean initConfig = false;
     //配置文件地址
     private static String configPath;
     // 地址
@@ -113,7 +111,12 @@ public class ClientFactoryBuilder {
     // 构造 节点数据
     public static class builder {
         public builder initConfig(boolean b) {
-            ClientFactoryBuilder.initConfig = b;
+            if (b) {
+                if (Strings.isNullOrEmpty(ClientFactoryBuilder.configPath)) {
+                    throw new IllegalArgumentException("configPath cant be null ! please set it");
+                }
+                ClientFactoryBuilder.initConfg(ClientFactoryBuilder.configPath);
+            }
             return this;
         }
 
