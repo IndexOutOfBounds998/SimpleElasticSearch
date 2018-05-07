@@ -17,7 +17,6 @@
   <groupId>pers.yang.elastichelper</groupId>
     <artifactId>elasticSearchhelper</artifactId>
     <version>1.0.7</version>
-    <packaging>jar</packaging>
     <dependency>`
     
     
