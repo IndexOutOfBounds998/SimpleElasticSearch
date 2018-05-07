@@ -4,18 +4,20 @@
 引用代码
  pom 
   要用 distributionManagement 方式去下载
-    <distributionManagement>
+   ` <distributionManagement>
          <repository>
              <id>admin</id>
              <url>http://112.74.215.107:8081/repository/maven-releases/</url>
          </repository>
-     </distributionManagement>
+     </distributionManagement>`
 
-
-   <groupId>pers.yang.elastichelper</groupId>
+#
+  `<dependency> 
+  <groupId>pers.yang.elastichelper</groupId>
     <artifactId>elasticSearchhelper</artifactId>
     <version>1.0.7</version>
     <packaging>jar</packaging>
+    <dependency>`
     
     
 
