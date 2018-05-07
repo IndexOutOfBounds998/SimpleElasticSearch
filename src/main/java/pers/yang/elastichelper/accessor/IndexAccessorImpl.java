@@ -175,7 +175,9 @@ public class IndexAccessorImpl implements IndexAccessor {
                     Requests.putMappingRequest(indexName).type(typeName).source(SearchUtil.getMapping(clazz));
             client.admin().indices().putMapping(mappingRequest).actionGet();
             LOG.info("创建mapping\"" + typeName + "\"成功");
+            return true;
         } catch (Exception e) {
+            LOG.info("创建mapping 发生异常：异常信息" + e.getMessage());
             e.printStackTrace();
         }
 
