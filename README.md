@@ -31,10 +31,11 @@
 查询数据： 
 #支持must mustnot should 查询 等bool查询 普通查询 
           
-#代码
+**1. 创建连接 创建setting mapping index**
 
 ```java
- //创建连接 链接方式1
+ //创建连接 链接方式1 然后使用accessor 对象进行增删改查数据  
+      public static void main(String[] args) {
         IAccessor accessor = new ClientFactoryBuilder
                 .Builder()
                 .setCLUSTER_NAME("elasticsearch")//es别名
@@ -81,12 +82,51 @@
         //删除一条 id 为1的数据
         accessor.delete("1", TestModel.class);
         //详情见IAccessor 接口
+        }
    
 ``` 
-           
-然后使用accessor 对象进行增删改查数据     
+   **2. es搜索**
+   ```java
+     public static void main(String[] args) {
+          BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
+                //搜索商品名称 名称进行ik分词+商品sku
+                Map<String, Float> fieldsMap = new HashMap<>();
+                fieldsMap.put("product_name.ik", (float) 2);
+                fieldsMap.put("product_code", (float) 1);
+                QueryStringQueryBuilder fieldsMapBuilder = new QueryStringQueryBuilder(keyWord);
+                fieldsMapBuilder.fields(fieldsMap);
+                //创建过滤构造builder
+                BoolQueryBuilder filterbuilder = QueryBuilders.boolQuery();
+                //添加过滤参数 未删除的已经上架的商品
+                filterbuilder.must(QueryBuilders.termQuery("is_delete", 0));
+                filterbuilder.must(QueryBuilders.termQuery("seller_status", 1));
+                //构造总体查询
+                rootBuilder.filter(filterbuilder);
+                rootBuilder.should(fieldsMapBuilder);
+                //创建QueryBuilderCondition 构建整体的查询
+                QueryBuilderCondition booleanCondtionBuilder = new QueryBuilderCondition.builder()
+                        .setBoolQueryBuilder(rootBuilder)
+                        .setStart(pageSize * (pageIndex - 1))
+                        .setRow(pageSize)
+                        .setMinScore(0)
+                        .builder();
+                Result result = null;
+                try {
+                    //开始搜索 just for fun
+                    result = EleasticAccessorManager
+                            .ACCESSOR_MANAGE
+                            .getAccessor()
+                            .searchFun(ProductsEntity.class, booleanCondtionBuilder);
+                } catch (Exception e) {
+                    logger.error("elasticSearch 查询接口异常 异常信息：" + e.getMessage());
+                }   
+                //查询的数据list
+           result.getList();
+       result.getSearchHits().getTotalHits()
+       }
+``` 
 
-数据实体类 demo
+#数据实体类 demo
 
 ```java
 import annotations.Document;
