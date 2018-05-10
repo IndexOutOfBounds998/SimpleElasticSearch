@@ -1,5 +1,5 @@
 # elasticSearchHelper
-#  直接看测试类 简单明了
+#  thanks for es
 
 引用代码
  pom 
