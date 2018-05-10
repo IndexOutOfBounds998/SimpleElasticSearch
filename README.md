@@ -4,21 +4,23 @@
 引用代码
  pom 
   #要用 distributionManagement 方式去下载
-  
-   ` <distributionManagement>
+ 
+```java 
+   <distributionManagement>
          <repository>
              <id>admin</id>
              <url>http://112.74.215.107:8081/repository/maven-releases/</url>
          </repository>
-     </distributionManagement>`
+     </distributionManagement>
 
 
-  `<dependency> 
+  <dependency> 
   <groupId>pers.yang.elastichelper</groupId>
     <artifactId>elasticSearchhelper</artifactId>
     <version>1.0.7</version>
-    <dependency>`
+    <dependency>
     
+```
     
 
 功能：
@@ -31,15 +33,17 @@
           
 #代码
 
-# IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch") 
-#                .setCLIENT_PORT(9300)
-#                .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1")))
-#                .create(); 
-                
+ `__``**IAccessor accessor = new ClientFactoryBuilder.builder().setCLUSTER_NAME("elasticsearch") 
+               .setCLIENT_PORT(9300)
+                .setHOSTS(new ArrayList<>(Arrays.asList("127.0.0.1")))
+               .create();__** `
+    
+           
 然后使用accessor 对象进行增删改查数据     
 
 数据实体类 demo
 
+```java
 import annotations.Document;
 import annotations.Field;
 import annotations.ID;
@@ -209,3 +213,5 @@ public class ProductsEntity {
         this.nick_name = nick_name;
     }
 }
+
+```

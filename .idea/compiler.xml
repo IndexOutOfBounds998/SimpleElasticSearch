@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="elasticSearchhelper" />
+        <module name="elasticSearchHelper" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="elasticSearchhelper" target="1.8" />
+      <module name="elasticSearchHelper" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
