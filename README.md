@@ -34,7 +34,8 @@
 **1. 创建连接 创建setting mapping index**
 
 ```java
- //创建连接 链接方式1 然后使用accessor 对象进行增删改查数据  
+ //创建连接 链接方式1 然后使用accessor 对象进行增删改查数据 
+ public class TestIndex {
       public static void main(String[] args) {
         IAccessor accessor = new ClientFactoryBuilder
                 .Builder()
@@ -83,10 +84,12 @@
         accessor.delete("1", TestModel.class);
         //详情见IAccessor 接口
         }
+        }
    
 ``` 
    **2. es搜索**
    ```java
+       public class TestSearch {
      public static void main(String[] args) {
           BoolQueryBuilder rootBuilder = QueryBuilders.boolQuery();
                 //搜索商品名称 名称进行ik分词+商品sku
@@ -124,10 +127,11 @@
            result.getList();
        result.getSearchHits().getTotalHits()
        }
+       }
 ``` 
 
-#数据实体类 demo
 
+  **3. 数据实体类**
 ```java
 import annotations.Document;
 import annotations.Field;
