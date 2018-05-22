@@ -44,7 +44,9 @@
          start = 0
          #默认查询时显示的每页记录数量
          rows = 10
-```properties
+
+
+```
           
 **1. 创建连接 创建setting mapping index**
 
