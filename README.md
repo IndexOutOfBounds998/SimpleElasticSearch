@@ -24,12 +24,27 @@
     
 
 功能：
-1.根据json生成setting  
-2.实体类注解生成mapping 
-3.数据的增删改查
+#1.根据json生成setting  
+#2.实体类注解生成mapping 
+#3.数据的增删改查
 
 查询数据： 
 #支持must mustnot should 查询 等bool查询 普通查询 
+      
+#用链接2的方式 需要配置配置文件        
+```properties
+         #elasticsearch集群名称
+         cluster.name = elasticsearch
+         #elasticsearch集群中的主机地址列表（多个主机，以","分隔）
+         #hosts = 192.168.3.41
+         hosts=127.0.0.1
+         #elasticsearch客户端连接端口号（默认9300）
+         client.port = 9300
+         #默认查询时显示的开始位置
+         start = 0
+         #默认查询时显示的每页记录数量
+         rows = 10
+```properties
           
 **1. 创建连接 创建setting mapping index**
 
