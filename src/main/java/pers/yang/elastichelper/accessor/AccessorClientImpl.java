@@ -155,11 +155,6 @@ public class AccessorClientImpl implements IAccessor {
 
 
     /**
-     * // BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery(); // QueryStringQueryBuilder queryFilterBuilder =
-     * new QueryStringQueryBuilder("白色"); // queryFilterBuilder.defaultField("productName.pinyin"); //
-     * boolQueryBuilder.must(queryFilterBuilder); // boolQueryBuilder.must(QueryBuilders.termQuery("userId", "1")); //
-     * boolQueryBuilder.must(QueryBuilders.termQuery("brandId", "1"));
-     *
      * @param clazz
      * @param params
      * @param <T>
@@ -184,9 +179,8 @@ public class AccessorClientImpl implements IAccessor {
             searchRequestBuilder.setFrom(params.getStart()).setSize(params.getRow());
         }
         // 排序字段
-        if (params.getSortMap() != null && params.getSortMap().size() > 0) {
+        if (Objects.nonNull(params.getSortMap()) && params.getSortMap().size() > 0) {
             Iterator it = params.getSortMap().entrySet().iterator();
-
             while (it.hasNext()) {
                 Map.Entry<String, SortOrder> entity = (Map.Entry) it.next();
                 searchRequestBuilder.addSort(entity.getKey(), entity.getValue());
@@ -198,25 +192,9 @@ public class AccessorClientImpl implements IAccessor {
         SearchHits hits = response.getHits();
 
         // 转换 model
-        List<T> list = new ArrayList<T>();
-        Map<String, Object> resultMap = new HashMap<String, Object>();
-        for (SearchHit hit : hits.getHits()) {
-            Map<String, Object> map = hit.getSourceAsMap();
-            // 将指定显示的字段放入map
-            for (String field : map.keySet()) {
-                String value = map.get(field).toString();
-                resultMap.put(field, value);
-            }
-            // OR for(String field : showFields){resultMap.put(field, hit.field(field).getValue().toString());}
-            // resultMap.put("id", hit.getId());
-            resultMap.put(SearchUtil.getidName(clazz), hit.getId());
-            T model = null;
-            if (resultMap != null) {
-                model = SearchUtil.MapToModel(resultMap, clazz);
-            }
-            list.add(model);
-        }
-
+        List<T> list = new ArrayList<>();
+        Map<String, Object> resultMap = new HashMap<>();
+        list = loopHits(hits, resultMap, clazz, list);
         // 返回结果集
         Result result = new Result();
         result.setSearchHits(hits);
@@ -262,10 +240,7 @@ public class AccessorClientImpl implements IAccessor {
             }
             searchRequestBuilder.highlighter(highlightBuilder);
         }
-        if (!Objects.isNull(params.getMinScore())) {
-            searchRequestBuilder.setMinScore(params.getMinScore());
-        }
-
+        searchRequestBuilder.setMinScore(params.getMinScore());
         // 执行查询操作
         SearchResponse response = searchRequestBuilder.execute().actionGet();
         // 处理查询结果
@@ -274,6 +249,16 @@ public class AccessorClientImpl implements IAccessor {
         // 转换 model
         List<T> list = new ArrayList<T>();
         Map<String, Object> resultMap = new HashMap<String, Object>();
+        list = loopHits(hits, resultMap, clazz, list);
+        // 返回结果集
+        Result result = new Result();
+        result.setSearchHits(hits);
+        result.setList(list);
+        return result;
+    }
+
+
+    private <T> List<T> loopHits(SearchHits hits, Map<String, Object> resultMap, Class<T> clazz, List<T> list) {
         for (SearchHit hit : hits.getHits()) {
             Map<String, Object> map = hit.getSourceAsMap();
             // 将指定显示的字段放入map
@@ -290,12 +275,7 @@ public class AccessorClientImpl implements IAccessor {
             }
             list.add(model);
         }
-
-        // 返回结果集
-        Result result = new Result();
-        result.setSearchHits(hits);
-        result.setList(list);
-        return result;
+        return list;
     }
 
 

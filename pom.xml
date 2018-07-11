@@ -6,7 +6,7 @@
 
     <groupId>pers.yang.elastichelper</groupId>
     <artifactId>elasticSearchhelper</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <packaging>jar</packaging>
 
     <distributionManagement>
