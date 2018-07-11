@@ -25,6 +25,30 @@ import org.elasticsearch.search.sort.SortOrder;
  * 扫描指定包下面的ES实体类、获取建立索引所需的Setting信息、获取指定实体类相对应的mapping信息、 以及解析es的查询参数
  */
 public class SearchUtil {
+    /**
+     * @Author yang
+     * @Date 2018/7/11 18:22
+     * @Description 过滤数据
+     */
+    private static final List<String> words = new ArrayList<String>() {{
+        "Integer".
+                toLowerCase();
+        "Float".
+
+                toLowerCase();
+        "Double".
+
+                toLowerCase();
+        "Boolean".
+
+                toLowerCase();
+        "BigDecimal".
+
+                toLowerCase();
+        "Date".
+
+                toLowerCase();
+    }};
     private static Logger LOG = Logger.getLogger(SearchUtil.class);
 
     /* 获取指定实体类的索引名称 */
@@ -205,17 +229,13 @@ public class SearchUtil {
         return ((Document) modelClazz.getAnnotation(Document.class)).init();
     }
 
-
-    /* 获取指定类的mapping,并组装成json字符串 */
+    /**
+     * @Author yang
+     * @Date 2018/7/11 18:23
+     * @Description 获取指定类的mapping, 并组装成json字符串
+     * 自动扫描 实体类
+     */
     public static String getMapping(Class clazz) {
-        List<String> words = new ArrayList<String>();
-        words.add("Integer".toLowerCase());
-        words.add("Float".toLowerCase());
-        words.add("Double".toLowerCase());
-        words.add("Boolean".toLowerCase());
-        words.add("BigDecimal".toLowerCase());
-        words.add("Date".toLowerCase());
-
         if (!getInitValue(clazz))
             return null;
         JSONObject rootJson = new JSONObject();
@@ -260,7 +280,7 @@ public class SearchUtil {
                     }
 
                 } else {
-                    // 数值类的不能添加分词
+                    // int dou bigd 类的不能添加分词
                     if (!words.contains(type)) {
                         fieldJson.put("analyzer", analyzer);
                     }
