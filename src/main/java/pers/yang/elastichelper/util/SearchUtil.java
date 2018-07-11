@@ -341,37 +341,5 @@ public class SearchUtil {
         return settings.toString();
     }
 
-    /* 生成指定的Setting信息，暂时不用 */
-    public static String getSettings() {
-        JSONObject root = new JSONObject();
-        JSONObject settings = new JSONObject();
-        settings.put("number_of_shards", "3");
-        settings.put("number_of_replicas", "1");
-        JSONObject analysis = new JSONObject();
-        JSONObject analyzer = new JSONObject();
-        JSONObject pinyin_analyzer = new JSONObject();
-        pinyin_analyzer.put("type", "pattern");
-        pinyin_analyzer.put("pattern", "\\w");
-        pinyin_analyzer.put("alias", new String[]{"pinyin"});
-        JSONObject douhao_analyzer = new JSONObject();
-        douhao_analyzer.put("type", "pattern");
-        douhao_analyzer.put("pattern", ",");
-        douhao_analyzer.put("alias", new String[]{"douhao"});
-        JSONObject fenhao_analyzer = new JSONObject();
-        fenhao_analyzer.put("type", "pattern");
-        fenhao_analyzer.put("pattern", ";");
-        fenhao_analyzer.put("alias", new String[]{"fenhao"});
-        JSONObject ik_analyzer = new JSONObject();
-        ik_analyzer.put("type", "org.elasticsearch.index.analysis.IkAnalyzerProvider");
-        ik_analyzer.put("alias", new String[]{"ik_analyzer"});
-        analyzer.put("pinyin_analyzer", pinyin_analyzer);
-        analyzer.put("douhao_analyzer", douhao_analyzer);
-        analyzer.put("fenhao_analyzer", fenhao_analyzer);
-        analyzer.put("ik", ik_analyzer);
-        analysis.put("analyzer", analyzer);
-        settings.put("analysis", analysis);
-        root.put("settings", settings);
-        return root.toJSONString();
-    }
 
 }
