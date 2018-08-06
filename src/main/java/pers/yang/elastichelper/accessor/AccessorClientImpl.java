@@ -60,7 +60,11 @@ public class AccessorClientImpl implements IAccessor {
         String indexName = SearchUtil.getIndexName(model);
         String typeName = SearchUtil.getTypeName(model);
         String json = SearchUtil.ModelToJson(model);
-        String id = SearchUtil.getidValue(model).toString();
+        Object idObj = SearchUtil.getidValue(model);
+        String id = null;
+        if (idObj != null) {
+            id = idObj.toString();
+        }
         IndexResponse response;
         // 如果id为null,则不设置，es会自动生成
         if (id == null) {
@@ -68,12 +72,18 @@ public class AccessorClientImpl implements IAccessor {
         } else {
             response = client.prepareIndex(indexName, typeName, id).setSource(json).execute().actionGet();
         }
-        boolean bool = Integer.parseInt(response.getId()) >= 0;
+        //这里有可能id不是int类型 这样的转换就会抛异常 直接判断是否为空
+        boolean bool = response.getId() != null;
+//        boolean bool = Integer.parseInt(response.getId()) >= 0;
         LOG.info("添加对象" + model + (bool ? "成功！" : "失败"));
         return bool;
     }
 
-    /* 批量添加对象 */
+    /**
+     * @author yang
+     * @date 2018/8/6 11:49
+     * @description 批量添加对象
+     */
     @Override
     public <T> boolean add(List<T> models) {
         boolean bool = false;
@@ -87,7 +97,12 @@ public class AccessorClientImpl implements IAccessor {
             for (T model : models) {
                 try {
                     String json = SearchUtil.ModelToJson(model);
-                    String id = SearchUtil.getidValue(model).toString();
+//                    String id = SearchUtil.getidValue(model).toString()
+                    Object idObj = SearchUtil.getidValue(model);
+                    String id = null;
+                    if (idObj != null) {
+                        id = idObj.toString();
+                    }
                     // 如果id为null,则不设置，es会自动生成
                     if (id == null) {
                         bulkRequest.add(client.prepareIndex(indexName, typeName).setSource(json));
@@ -95,7 +110,7 @@ public class AccessorClientImpl implements IAccessor {
                         bulkRequest.add(client.prepareIndex(indexName, typeName, id).setSource(json));
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    LOG.info("add model case error on " + e.getMessage());
                     continue;
                 }
             }
@@ -111,7 +126,11 @@ public class AccessorClientImpl implements IAccessor {
         return bool;
     }
 
-    /* 根据ID获得记录 */
+    /**
+     * @author yang
+     * @date 2018/8/6 11:50
+     * @description 根据ID获得记录
+     */
     @Override
     public <T> T get(Class<T> clazz, String id) {
         T result = null;
@@ -132,7 +151,11 @@ public class AccessorClientImpl implements IAccessor {
         return result;
     }
 
-    /* 根据ID删除记录 */
+    /**
+     * @author yang
+     * @date 2018/8/6 11:51
+     * @description 根据ID删除记录
+     */
     @Override
     public boolean delete(String id, Class clazz) {
         DeleteResponse response = client
@@ -167,13 +190,11 @@ public class AccessorClientImpl implements IAccessor {
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName);
         searchRequestBuilder.setTypes(typeName);
         // 设置是否按查询匹配度排序
-        searchRequestBuilder.setExplain(true);
+        searchRequestBuilder.setExplain(params.isExplain());
         // 设置查询类型
-        searchRequestBuilder.setSearchType(SearchType.DFS_QUERY_THEN_FETCH);
+        searchRequestBuilder.setSearchType(params.getSearchType());
         // 设置query
-        if (params != null) {
-            searchRequestBuilder.setQuery(params.getBoolQueryBuilder());
-        }
+        searchRequestBuilder.setQuery(params.getBoolQueryBuilder());
         if (params.getRow() > 0) {
             // 设置开始位置及大小
             searchRequestBuilder.setFrom(params.getStart()).setSize(params.getRow());
@@ -222,10 +243,9 @@ public class AccessorClientImpl implements IAccessor {
         }
         // 排序字段
         if (params.getSortMap() != null && params.getSortMap().size() > 0) {
-            Iterator it = params.getSortMap().entrySet().iterator();
 
-            while (it.hasNext()) {
-                Map.Entry<String, SortOrder> entity = (Map.Entry) it.next();
+            for (Object o : params.getSortMap().entrySet()) {
+                Map.Entry<String, SortOrder> entity = (Map.Entry) o;
                 searchRequestBuilder.addSort(entity.getKey(), entity.getValue());
             }
         }
@@ -269,10 +289,7 @@ public class AccessorClientImpl implements IAccessor {
             // OR for(String field : showFields){resultMap.put(field, hit.field(field).getValue().toString());}
             // resultMap.put("id", hit.getId());
             resultMap.put(SearchUtil.getidName(clazz), hit.getId());
-            T model = null;
-            if (resultMap != null) {
-                model = SearchUtil.MapToModel(resultMap, clazz);
-            }
+            T model = SearchUtil.MapToModel(resultMap, clazz);
             list.add(model);
         }
         return list;

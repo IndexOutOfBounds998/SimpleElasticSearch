@@ -101,7 +101,11 @@ public class SearchUtil {
         return id;
     }
 
-    /* 获取注解ID标志的字段对应的值 */
+    /**
+     * @author yang
+     * @date 2018/8/6 11:41
+     * @description 获取注解ID标志的字段对应的值 getidValue 异常 return null
+     */
     public static <T> Object getidValue(T model) {
         Class clazz = model.getClass();
         String idName = getidName(clazz);
@@ -113,7 +117,7 @@ public class SearchUtil {
             method = clazz.getMethod(methodName);
             idValue = method.invoke(model);
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
         return idValue;
     }

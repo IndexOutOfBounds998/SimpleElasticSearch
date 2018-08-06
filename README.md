@@ -1,5 +1,6 @@
 # elasticSearchHelper
 #  thanks for es
+# 着手进行第二版本的开发ing 更少的代码 更简洁的方式 let's go!
 
 引用代码
  pom 

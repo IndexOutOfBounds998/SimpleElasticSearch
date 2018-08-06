@@ -20,7 +20,7 @@ public class QueryBuilderCondition {
 
     private int start = 0;
 
-    private int row;
+    private int row = 10;
 
     private boolean isShowHighLight = false;
     //最小相关度
