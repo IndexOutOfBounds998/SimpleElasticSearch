@@ -1,28 +1,4 @@
 # elasticSearchHelper
-#  thanks for es
-#  let's go!
-
-引用代码
- pom 
-  #要用 distributionManagement 方式去下载
- 
-```java 
-   <distributionManagement>
-         <repository>
-             <id>admin</id>
-             <url>http://112.74.215.107:8081/repository/maven-releases/</url>
-         </repository>
-     </distributionManagement>
-
-
-  <dependency> 
-  <groupId>pers.yang.elastichelper</groupId>
-    <artifactId>elasticSearchhelper</artifactId>
-    <version>1.0.7</version>
-    <dependency>
-    
-```
-    
 
 功能：
 #1.根据json生成setting  
