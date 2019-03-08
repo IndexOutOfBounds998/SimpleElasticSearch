@@ -1,4 +1,4 @@
-# elasticSearchHelper
+# SimpleElasticSearch
 
 功能：
 #1.根据json生成setting  
